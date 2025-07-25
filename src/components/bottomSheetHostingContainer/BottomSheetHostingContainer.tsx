@@ -21,6 +21,7 @@ function BottomSheetHostingContainerComponent({
   detached,
   style,
   children,
+  importantForAccessibility,
 }: BottomSheetHostingContainerProps) {
   //#region refs
   const containerRef = useRef<View>(null);
@@ -90,6 +91,7 @@ function BottomSheetHostingContainerComponent({
       onLayout={shouldCalculateHeight ? handleLayoutEvent : undefined}
       style={containerStyle}
       collapsable={true}
+      importantForAccessibility={importantForAccessibility}
     >
       {children}
     </View>

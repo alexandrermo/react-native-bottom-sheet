@@ -53,6 +53,9 @@ function BottomSheetModalComponent<T = any>(
     animateOnMount = true,
     containerComponent: ContainerComponent = React.Fragment,
 
+    // accessibility
+    importantForAccessibility,
+
     // callbacks
     onChange: _providedOnChange,
 
@@ -463,6 +466,7 @@ function BottomSheetModalComponent<T = any>(
           onClose={handleBottomSheetOnClose}
           onAnimate={handleBottomSheetOnAnimate}
           $modal={true}
+          importantForAccessibility={importantForAccessibility}
         >
           {typeof Content === 'function' ? <Content data={data} /> : Content}
         </BottomSheet>

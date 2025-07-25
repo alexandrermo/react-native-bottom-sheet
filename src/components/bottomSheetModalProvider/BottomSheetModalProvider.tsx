@@ -1,5 +1,5 @@
 import { PortalProvider } from '@gorhom/portal';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import { MODAL_STACK_BEHAVIOR } from '../../constants';
 import {
@@ -20,6 +20,7 @@ import type {
   BottomSheetModalProviderProps,
   BottomSheetModalRef,
 } from './types';
+import { View } from 'react-native';
 
 const BottomSheetModalProviderWrapper = ({
   children,
@@ -32,6 +33,7 @@ const BottomSheetModalProviderWrapper = ({
   //#region variables
   const hostName = useMemo(() => `bottom-sheet-portal-${id()}`, []);
   const sheetsQueueRef = useRef<BottomSheetModalRef[]>([]);
+  const [sheetsCount, setSheetsCount] = useState(0);
   //#endregion
 
   //#region private methods
@@ -89,6 +91,7 @@ const BottomSheetModalProviderWrapper = ({
         willUnmount: false,
       });
       sheetsQueueRef.current = _sheetsQueue;
+      setSheetsCount(_sheetsQueue.length);
     },
     []
   );
@@ -103,6 +106,7 @@ const BottomSheetModalProviderWrapper = ({
      */
     _sheetsQueue.splice(sheetIndex, 1);
     sheetsQueueRef.current = _sheetsQueue;
+    setSheetsCount(_sheetsQueue.length);
 
     /**
      * Here we try to restore previous sheet position if unmounted
@@ -146,6 +150,8 @@ const BottomSheetModalProviderWrapper = ({
     }
 
     sheetsQueueRef.current = _sheetsQueue;
+
+    setSheetsCount(_sheetsQueue.length);
   }, []);
   //#endregion
 
@@ -195,15 +201,22 @@ const BottomSheetModalProviderWrapper = ({
   );
   //#endregion
 
+  const isModalVisible = sheetsQueueRef.current.length > 0;
+
   //#region renders
   return (
     <BottomSheetModalProvider value={externalContextVariables}>
       <BottomSheetModalInternalProvider value={internalContextVariables}>
         <BottomSheetHostingContainer
+          importantForAccessibility={isModalVisible ? "yes" : "no-hide-descendants"}
           containerOffset={animatedContainerOffset}
           containerHeight={animatedContainerHeight}
         />
-        <PortalProvider rootHostName={hostName}>{children}</PortalProvider>
+        <PortalProvider rootHostName={hostName}>
+          <View style={{flex: 1}} importantForAccessibility={isModalVisible ? "no-hide-descendants" : "yes"}>
+            {children}
+          </View>
+        </PortalProvider>
       </BottomSheetModalInternalProvider>
     </BottomSheetModalProvider>
   );

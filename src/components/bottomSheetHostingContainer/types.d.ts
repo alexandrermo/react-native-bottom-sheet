@@ -12,4 +12,5 @@ export interface BottomSheetHostingContainerProps
   shouldCalculateHeight?: boolean;
   style?: StyleProp<ViewStyle>;
   children?: ReactNode;
+  importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants';
 }
