@@ -33,7 +33,7 @@ const BottomSheetModalProviderWrapper = ({
   //#region variables
   const hostName = useMemo(() => `bottom-sheet-portal-${id()}`, []);
   const sheetsQueueRef = useRef<BottomSheetModalRef[]>([]);
-  const [sheetsCount, setSheetsCount] = useState(0);
+  const [_, setSheetsCount] = useState(0);
   //#endregion
 
   //#region private methods
